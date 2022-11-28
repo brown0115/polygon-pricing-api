@@ -100,6 +100,7 @@ const {
 } = require('./controller/stocks')
 
 //ROUTES
+app.get('/', () => console.log('Welcome to pricing api'))
 //crypto
 app.get('/cryptos', getExchangeRateOfCrypto)
 app.get('/crypto/:name', getExchangeRateOfCryptoByName)
