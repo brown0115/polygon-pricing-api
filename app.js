@@ -18,8 +18,7 @@ const io = socketIo(server, {
 const Polygon = require('./util/polygon')
 
 const corsOptions = {
-  origin: `${process.env.CORS_ORIGIN}`,
-  // origin: 'http://34.68.219.73/'
+  origin: `${process.env.CORS_ORIGIN}`
 }
 app.use(cors())
 
