@@ -20,19 +20,26 @@ module.exports.getExchangeRatesOfForex = async (_, res) => {
 	try {
 		//fetch data
 		// alpha vantage crypto currency exchange rate
-		const resp = await getAllExchangeRatesOfForex()
-		//prepare data
-		// alpha vantange
-		const refactorData = resp.map(item => {
-			const newData = item.data["Realtime Currency Exchange Rate"]
-			const symbol = newData["1. From_Currency Code"] + "/" + newData["3. To_Currency Code"]
-			return {
-				[symbol]: Number(newData["5. Exchange Rate"]),
-				last_refreshed: newData["6. Last Refreshed"],
-			}
+		const respPolygonForex = await getAllExchangeRatesOfForex()
+		const { tickers } = respPolygonForex && respPolygonForex.data;
+		const dataPolygonForex = [];
+		FOREX.map((frx) => {
+			const labelString = `C:${frx.toUpperCase()}USD`;
+			tickers.map((item) => {
+				const { ticker, todaysChangePerc, day, lastQuote} = item;
+				const { o } = day;
+				const { t } = lastQuote;
+				if (ticker === labelString) {
+					const label = `${frx.toUpperCase()}/USD`;
+					dataPolygonForex.push({
+						[label]: o,
+						changes_24hrs: todaysChangePerc,
+						last_refreshed: new Date(t)
+					})
+				}
+			})
 		})
-
-		res.status(200).json(refactorData)
+		res.status(200).json(dataPolygonForex)
 	} catch (err) {
 		console.log(err)
 	}
@@ -94,3 +101,5 @@ module.exports.getExchangeRateOfForexByName = async (req, res) => {
 		console.log(err)
 	}
 }
+
+const FOREX = ['eur', 'aud', 'gbp', 'cnh', 'jpy', 'mxn']

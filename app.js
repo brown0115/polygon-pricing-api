@@ -1,7 +1,7 @@
 require('dotenv').config()
 const cors = require('cors')
 const express = require('express')
-const { createServer } = require('https') // you can use https as well
+const { createServer } = require('http') // you can use https as well
 const socketIo = require('socket.io')
 const bodyParser = require('body-parser')
 
@@ -20,6 +20,7 @@ const Polygon = require('./util/polygon')
 const corsOptions = {
   origin: `${process.env.CORS_ORIGIN}`
 }
+
 app.use(cors())
 
 //middleware

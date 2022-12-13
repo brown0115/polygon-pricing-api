@@ -4,6 +4,8 @@ const getUrl = (fromCurrency, toCurrency) => {
 	return `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${fromCurrency}&to_currency=${toCurrency}&apikey=${process.env.API_KEY}`
 }
 
+const allForexEndpoints = `https://api.polygon.io/v2/snapshot/locale/global/markets/forex/tickers?apiKey=${process.env.STOCKS_API_KEY}`
+
 // get real time currency exchange rate of EUR/USD
 const getExchangeRateEURUSD = () => {
 	return axios.get(getUrl("EUR", "USD"))
@@ -56,18 +58,20 @@ const getExchangeRateUSDMXN = () => {
 
 // get all the exchange rates by calling the above functions in promise.all
 const getAllExchangeRatesOfForex = () => {
-	return Promise.all([
-		getExchangeRateEURUSD(),
-		getExchangeRateEURGBP(),
-		getExchangeRateEURAUD(),
-		getExchangeRateAUDUSD(),
-		getExchangeRateGBPUSD(),
-		getExchangeRateUSDCNH(),
-		getExchangeRateEURJPY(),
-		getExchangeRateAUDNZD(),
-		getExchangeRateUSDJPY(),
-		getExchangeRateUSDMXN(),
-	])
+	return axios.get(allForexEndpoints);
+
+	// return Promise.all([
+	// 	getExchangeRateEURUSD(),
+	// 	getExchangeRateEURGBP(),
+	// 	getExchangeRateEURAUD(),
+	// 	getExchangeRateAUDUSD(),
+	// 	getExchangeRateGBPUSD(),
+	// 	getExchangeRateUSDCNH(),
+	// 	getExchangeRateEURJPY(),
+	// 	getExchangeRateAUDNZD(),
+	// 	getExchangeRateUSDJPY(),
+	// 	getExchangeRateUSDMXN(),
+	// ])
 }
 
 module.exports = {

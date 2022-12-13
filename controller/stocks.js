@@ -28,18 +28,27 @@ module.exports.getSpecificStockPrice = async (req, res) => {
 // Route: /stocks
 module.exports.getAllStocksPrice = async (_, res) => {
 	try {
-		const resp = await getStocksValueOfAll()
-		const prices = resp.map(r => {
-			const result = r.data?.results
-			return {
-				[result?.T]: result?.p,
-				time: convertUnixToGMT(result?.t),
-			}
+		const respPolygonStocks = await getStocksValueOfAll()
+
+		const { tickers } = respPolygonStocks && respPolygonStocks.data;
+		const dataPolygonStocks = [];
+		STOCKS.map((stc) => {
+			tickers.map((item) => {
+				const { ticker, todaysChangePerc, day, lastQuote} = item;
+				const { o } = day;
+				const { t } = lastQuote;
+				if (ticker === stc) {
+					const label = stc;
+					dataPolygonStocks.push({
+						[label]: o,
+						changes_24hrs: todaysChangePerc,
+						last_refreshed: new Date()
+					})
+				}
+			})
 		})
-		res.status(200).json({
-			success: true,
-			prices,
-		})
+
+		res.status(200).json(dataPolygonStocks)
 	} catch (err) {
 		res.status(404).json({
 			success: false,
@@ -47,3 +56,6 @@ module.exports.getAllStocksPrice = async (_, res) => {
 		})
 	}
 }
+
+
+const STOCKS = ["TSLA", "AAPL", "AMZN", "MSFT", "SNAP", "AXP", "CSCO", "T", "DIS", "ABBV", "MMM", "JPM", "JNJ"]

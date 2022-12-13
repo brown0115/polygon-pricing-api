@@ -3,8 +3,11 @@ const axios = require("axios")
 const getUrl = fromCurrency => {
 	return `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${fromCurrency}&to_currency=USD&apikey=${process.env.API_KEY}`
 }
+
+const allCryptoEndpoints = `https://api.polygon.io/v2/snapshot/locale/global/markets/crypto/tickers?apiKey=${process.env.STOCKS_API_KEY}`
+
 //get real time currency exchange rate of BTC
-const getExchangeRateBTC = () => {
+const getExchangeRateBTC = async () => {
 	return axios.get(getUrl("BTC"))
 }
 
@@ -85,24 +88,25 @@ const getExchangeRateFIL = () => {
 
 // get all crypto currency exchange rate
 const getAllCryptoExchangeRate = () => {
-	return axios.all([
-		getExchangeRateBTC(),
-		getExchangeRateETH(),
-		getExchangeRateLTC(),
-		getExchangeRateXLM(),
-		getExchangeRateADA(),
-		getExchangeRateNEO(),
-		getExchangeRateEOS(),
-		getExchangeRateIOTA(),
-		getExchangeRateSOL(),
-		getExchangeRateVET(),
-		getExchangeRateMATIC(),
-		getExchangeRateDOT(),
-		getExchangeRateAXS(),
-		getExchangeRateUNI(),
-		getExchangeRateLINK(),
-		getExchangeRateFIL(),
-	])
+	return axios.get(allCryptoEndpoints);
+	// return axios.all([
+	// 	getExchangeRateBTC(),
+	// 	getExchangeRateETH(),
+	// 	getExchangeRateLTC(),
+	// 	getExchangeRateXLM(),
+	// 	getExchangeRateADA(),
+	// 	getExchangeRateNEO(),
+	// 	getExchangeRateEOS(),
+	// 	getExchangeRateIOTA(),
+	// 	getExchangeRateSOL(),
+	// 	getExchangeRateVET(),
+	// 	getExchangeRateMATIC(),
+	// 	getExchangeRateDOT(),
+	// 	getExchangeRateAXS(),
+	// 	getExchangeRateUNI(),
+	// 	getExchangeRateLINK(),
+	// 	getExchangeRateFIL(),
+	// ])
 }
 
 module.exports = {

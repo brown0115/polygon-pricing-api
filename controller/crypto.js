@@ -25,20 +25,27 @@ const { listOfCrypto } = require("../util")
 module.exports.getExchangeRateOfCrypto = async (_, res) => {
 	try {
 		//fetch data
-		// alpha vantage crypto currency exchange rate
-		const respAlphaCrypto = await getAllCryptoExchangeRate()
-		//prepare data
-		// alpha vantange
-		const dataAlphaCrypto = respAlphaCrypto.map(item => {
-			const newData = item.data["Realtime Currency Exchange Rate"]
-			const symbol = newData["1. From_Currency Code"] + "/" + newData["3. To_Currency Code"]
-			return {
-				[symbol]: Number(newData["5. Exchange Rate"]),
-				last_refreshed: newData["6. Last Refreshed"],
-			}
+		// polygon api crypto currency exchange rate
+		const respPolygonCrypto = await getAllCryptoExchangeRate();
+		const { tickers } = respPolygonCrypto && respPolygonCrypto.data;
+		const dataPolygonCrypto = [];
+		CRYPTOS.map((crp) => {
+			const labelString = `X:${crp.toUpperCase()}USD`;
+			tickers.map((item) => {
+				const { ticker, todaysChangePerc, day, lastTrade} = item;
+				const { o } = day;
+				const { t } = lastTrade;
+				if (ticker === labelString) {
+					const label = `${crp.toUpperCase()}/USD`;
+					dataPolygonCrypto.push({
+						[label]: o,
+						changes_24hrs: todaysChangePerc,
+						last_refreshed: new Date(t)
+					})
+				}
+			})
 		})
-
-		res.status(200).json(dataAlphaCrypto)
+		res.status(200).json(dataPolygonCrypto)
 	} catch (err) {
 		console.log(err)
 	}
@@ -112,3 +119,5 @@ module.exports.getExchangeRateOfCryptoByName = async (req, res) => {
 		console.log(err)
 	}
 }
+
+const CRYPTOS = ['btc', 'eth', 'ltc', 'xlm', 'ada', 'neo', 'eos', 'iot', 'sol', 'vet', 'matic', 'dot', 'axs', 'uni', 'link', 'fil'];

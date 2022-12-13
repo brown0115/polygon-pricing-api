@@ -3,6 +3,8 @@ const axios = require("axios")
 const getUrl = symbol =>
 	`https://api.polygon.io/v2/last/trade/${symbol?.toUpperCase()}?apiKey=${process.env.STOCKS_API_KEY}`
 
+const allStocksEndpoints = `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?apiKey=${process.env.STOCKS_API_KEY}`
+
 // get Value of a specific stock
 module.exports.getStocksValue = async symbol => {
 	return axios.get(getUrl(symbol))
@@ -24,7 +26,9 @@ module.exports.getStocksValue = async symbol => {
 
 // get Stocks of All above companies
 module.exports.getStocksValueOfAll = async () => {
-	const stocks = ["TSLA", "AAPL", "AMZN", "MSFT", "SNAP", "AXP", "CSCO", "T", "DIS", "ABBV", "MMM", "JPM", "JNJ"]
-	const promises = stocks.map(stock => axios.get(getUrl(stock)))
-	return Promise.all(promises)
+	return axios.get(allStocksEndpoints);
+
+	// const stocks = ["TSLA", "AAPL", "AMZN", "MSFT", "SNAP", "AXP", "CSCO", "T", "DIS", "ABBV", "MMM", "JPM", "JNJ"]
+	// const promises = stocks.map(stock => axios.get(getUrl(stock)))
+	// return Promise.all(promises)
 }
