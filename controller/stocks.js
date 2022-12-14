@@ -34,16 +34,17 @@ module.exports.getAllStocksPrice = async (_, res) => {
 		const dataPolygonStocks = [];
 		STOCKS.map((stc) => {
 			tickers.map((item) => {
-				const { ticker, todaysChangePerc, day, lastQuote} = item;
-				const { o } = day;
-				const { t } = lastQuote;
+				const { ticker, todaysChangePerc, lastQuote} = item;
+				const { p } = lastQuote;
 				if (ticker === stc) {
 					const label = stc;
 					dataPolygonStocks.push({
-						[label]: o,
+						[label]: p,
 						changes_24hrs: todaysChangePerc,
 						last_refreshed: new Date()
 					})
+
+					return 0;
 				}
 			})
 		})

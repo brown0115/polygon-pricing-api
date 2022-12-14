@@ -89,24 +89,6 @@ const getExchangeRateFIL = () => {
 // get all crypto currency exchange rate
 const getAllCryptoExchangeRate = () => {
 	return axios.get(allCryptoEndpoints);
-	// return axios.all([
-	// 	getExchangeRateBTC(),
-	// 	getExchangeRateETH(),
-	// 	getExchangeRateLTC(),
-	// 	getExchangeRateXLM(),
-	// 	getExchangeRateADA(),
-	// 	getExchangeRateNEO(),
-	// 	getExchangeRateEOS(),
-	// 	getExchangeRateIOTA(),
-	// 	getExchangeRateSOL(),
-	// 	getExchangeRateVET(),
-	// 	getExchangeRateMATIC(),
-	// 	getExchangeRateDOT(),
-	// 	getExchangeRateAXS(),
-	// 	getExchangeRateUNI(),
-	// 	getExchangeRateLINK(),
-	// 	getExchangeRateFIL(),
-	// ])
 }
 
 module.exports = {

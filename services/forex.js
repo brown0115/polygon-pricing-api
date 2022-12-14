@@ -59,19 +59,6 @@ const getExchangeRateUSDMXN = () => {
 // get all the exchange rates by calling the above functions in promise.all
 const getAllExchangeRatesOfForex = () => {
 	return axios.get(allForexEndpoints);
-
-	// return Promise.all([
-	// 	getExchangeRateEURUSD(),
-	// 	getExchangeRateEURGBP(),
-	// 	getExchangeRateEURAUD(),
-	// 	getExchangeRateAUDUSD(),
-	// 	getExchangeRateGBPUSD(),
-	// 	getExchangeRateUSDCNH(),
-	// 	getExchangeRateEURJPY(),
-	// 	getExchangeRateAUDNZD(),
-	// 	getExchangeRateUSDJPY(),
-	// 	getExchangeRateUSDMXN(),
-	// ])
 }
 
 module.exports = {

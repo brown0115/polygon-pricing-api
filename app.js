@@ -1,7 +1,7 @@
 require('dotenv').config()
 const cors = require('cors')
 const express = require('express')
-const { createServer } = require('http') // you can use https as well
+const { createServer } = require('https') // you can use https as well
 const socketIo = require('socket.io')
 const bodyParser = require('body-parser')
 
@@ -33,20 +33,20 @@ app.use((req, res, next) => {
   next()
 })
 
-io.on('connection', function (socket) {
-  const clientCrypto = new Polygon({
-    apiType: 'crypto',
-    apiKey: process.env.STOCKS_API_KEY,
-  })
-  const clientForex = new Polygon({
-    apiType: 'forex',
-    apiKey: process.env.STOCKS_API_KEY,
-  })
-  const clientStocks = new Polygon({
-    apiType: 'stocks',
-    apiKey: process.env.STOCKS_API_KEY,
-  })
+const clientCrypto = new Polygon({
+  apiType: 'crypto',
+  apiKey: process.env.STOCKS_API_KEY,
+})
+const clientForex = new Polygon({
+  apiType: 'forex',
+  apiKey: process.env.STOCKS_API_KEY,
+})
+const clientStocks = new Polygon({
+  apiType: 'stocks',
+  apiKey: process.env.STOCKS_API_KEY,
+})
 
+io.on('connection', function (socket) {
   // subscribing to all channels for crypto
   clientCrypto.subscribe(['XT.*'])
   clientCrypto.on('XT', (trade) => {
