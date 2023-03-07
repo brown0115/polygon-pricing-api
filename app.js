@@ -1,7 +1,7 @@
 require('dotenv').config()
 const cors = require('cors')
 const express = require('express')
-const { createServer } = require('https') // you can use https as well
+const { createServer } = require('http') // you can use https as well
 const socketIo = require('socket.io')
 const bodyParser = require('body-parser')
 
@@ -9,17 +9,22 @@ const bodyParser = require('body-parser')
 const app = express()
 
 const server = createServer(app)
+// const io = socketIo(server, {
+//   cors: {
+//     origin: `${process.env.CORS_ORIGIN}`,
+//     methods: ['GET', 'POST'],
+//   },
+// })
+
 const io = socketIo(server, {
-  cors: {
-    origin: `${process.env.CORS_ORIGIN}`,
-    methods: ['GET', 'POST'],
-  },
+  cors: {},
 })
+
 const Polygon = require('./util/polygon')
 
-const corsOptions = {
-  origin: `${process.env.CORS_ORIGIN}`
-}
+// const corsOptions = {
+//   origin: `${process.env.CORS_ORIGIN}`,
+// }
 
 app.use(cors())
 
@@ -47,9 +52,10 @@ const clientStocks = new Polygon({
 })
 
 io.on('connection', function (socket) {
-  // subscribing to all channels for crypto
+  //subscribing to all channels for crypto
   clientCrypto.subscribe(['XT.*'])
   clientCrypto.on('XT', (trade) => {
+    // console.log('crypto: ', trade);
     socket.emit('crypto_trade_data', trade)
   })
 
@@ -61,6 +67,7 @@ io.on('connection', function (socket) {
   // subscribing to all channels for forex
   clientForex.subscribe(['C.*'])
   clientForex.on('C', (trade) => {
+    //console.log('forex: ', trade);
     socket.emit('forex_trade_data', trade)
   })
 
@@ -72,6 +79,7 @@ io.on('connection', function (socket) {
   // subscribing to all channels for stocks
   clientStocks.subscribe(['Q.*'])
   clientStocks.on('Q', (trade) => {
+    console.log('stocks: ', trade);
     socket.emit('stocks_trade_data', trade)
   })
 
@@ -101,10 +109,14 @@ const {
 } = require('./controller/stocks')
 
 //ROUTES
-app.get('/', () => console.log('Welcome to pricing api'))
+app.get('/', (_, res) => {
+  res.statusCode = 200
+  res.setHeader('Content-Type', 'text/plain')
+  res.end('Welcome to Aped APIs!\n')
+})
 //crypto
 app.get('/cryptos', getExchangeRateOfCrypto)
-app.get('/crypto/:name', getExchangeRateOfCryptoByName)
+app.get('/cryptos/:name', getExchangeRateOfCryptoByName)
 
 //forex
 app.get('/forex', getExchangeRatesOfForex)
