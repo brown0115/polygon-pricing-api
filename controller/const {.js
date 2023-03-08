@@ -16,23 +16,32 @@ const {
   getExchangeRateLINK,
   getExchangeRateFIL,
   getAllCryptoExchangeRate,
+  getOneCryptoExchangeRate
 } = require('../services/crypto')
 const { listOfCrypto } = require('../util')
 
 //get exchange rate of all cryptos listed
 // Route: /cryptos
 
+async function getCertainExchangerateOfCrypto(string){
+  return await getOneCryptoExchangeRate(string);
+}
+
 module.exports.getExchangeRateOfCrypto = async (_, res) => {
   try {
     //fetch data
     // polygon api crypto currency exchange rate
-    const respPolygonCrypto = await getAllCryptoExchangeRate()
-    const { tickers } = respPolygonCrypto && respPolygonCrypto.data
+    //const respPolygonCrypto = await getAllCryptoExchangeRate()
+    //const { tickers } = respPolygonCrypto && respPolygonCrypto.data
     const dataPolygonCrypto = []
     CRYPTOS.map((crp) => {
       const labelString = `X:${crp.toUpperCase()}USD`
-      tickers.map((item) => {
-        const { ticker, todaysChangePerc, lastTrade } = item
+      console.log(labelString);
+      getCertainExchangerateOfCrypto(labelString).then((data)=>{
+        //console.log(data);
+        //console.log(data.data);
+        const { ticker, todaysChangePerc, lastTrade } = data.data.ticker;
+        //console.log(lastTrade);
         const { p, t } = lastTrade
         if (ticker === labelString) {
           const label = `${crp.toUpperCase()}/USD`

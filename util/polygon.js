@@ -10,6 +10,7 @@ class Polygon extends EventEmitter {
     this.apiKey = params.apiKey
     this.apiType = params.apiType
     this.connect()
+    this.counter = 0
   }
   subscribe(channels) {
     // Add to our list of subscriptions:
