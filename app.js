@@ -93,6 +93,8 @@ io.on('connection', function (socket) {
 const {
   getExchangeRateOfCrypto,
   getExchangeRateOfCryptoByName,
+  getExchangeRateOfCryptoByNumber,
+  getArrayPrices,
 } = require('./controller/crypto')
 const {
   getSpecificCryptoOHCL,
@@ -116,7 +118,9 @@ app.get('/', (_, res) => {
 })
 //crypto
 app.get('/cryptos', getExchangeRateOfCrypto)
+// app.get('/cryptos/:name', getExchangeRateOfCryptoByName)
 app.get('/cryptos/:name', getExchangeRateOfCryptoByName)
+app.get('/cryptos/id/:name', getExchangeRateOfCryptoByNumber)
 
 //forex
 app.get('/forex', getExchangeRatesOfForex)
@@ -130,6 +134,11 @@ app.get('/stock/:symbol', getSpecificStockPrice)
 app.get('/ohcl/crypto/:symbol/:interval', getSpecificCryptoOHCL)
 app.get('/ohcl/stocks/:symbol/:interval', getSpecificStocksOHCL)
 app.get('/ohcl/forex/:symbol/:interval', getSpecificForexOHCL)
+
+
+//POST request
+app.post('/asset/array', getArrayPrices)
+
 
 const port = process.env.EA_PORT || 8080
 
